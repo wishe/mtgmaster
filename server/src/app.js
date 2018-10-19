@@ -1,59 +1,49 @@
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const session = require('express-session');
-const cors = require('cors');
-const morgan = require('morgan');
-const mongoose = require('mongoose');
-const errorHandler = require('errorhandler');
+const express = require('express')
+const path = require('path')
+const bodyParser = require('body-parser')
+const session = require('express-session')
+const cors = require('cors')
+const morgan = require('morgan')
+const passport = require('passport')
+const errorHandlers = require('./handlers/errorHandlers')
+const routes = require('./routes/index')
+require('./handlers/passport')
 
-// Configure mongoose promise to global promise
-mongoose.promise = global.Promise;
+// Init APP
+const app = express()
 
-const isProduction = process.env.NODE_ENV === 'production';
+// Middleware
+app.use(cors())
+app.use(morgan('combined'))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(express.static(path.join(__dirname, 'public')))
+app.use(session({
+  secret: 'mtgmaster',
+  cookie: { maxAge: 60000 },
+  resave: false,
+  saveUninitialized: false
+}))
 
-//Init APP
-const app = express();
+app.use(passport.initialize())
+app.use(passport.session())
 
-app.use(cors());
-app.use(morgan('combined'));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: 'mtgmaster', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
+// Routes
+app.use('/', routes)
 
-if(!isProduction) {
-  app.use(errorHandler());
+// 404 Handler
+app.use(errorHandlers.notFound)
+
+// MongoDB Validation Errors
+app.use(errorHandlers.mongoValidationErrors)
+
+// Other errors
+if (app.get('env') === 'development') {
+  app.use(errorHandlers.developmentErrors)
 }
 
-// Configure mongoose
-mongoose.connect('');
-mongoose.set('debug', true);
+// Errors in Production
+app.use(errorHandlers.productionErrors)
 
-//Error handlers & middlewares
-if(!isProduction) {
-  app.use((err, req, res) => {
-    res.status(err.status || 500);
-
-    res.json({
-      errors: {
-        message: err.message,
-        error: err,
-      },
-    });
-  });
-}
-
-app.use((err, req, res) => {
-  res.status(err.status || 500);
-
-  res.json({
-    errors: {
-      message: err.message,
-      error: {},
-    },
-  });
-});
-
-
-app.listen(process.env.PORT || 8081, () => console.log('Server running!'));
+// done! we export it so we can start the site in start.js
+module.exports = app

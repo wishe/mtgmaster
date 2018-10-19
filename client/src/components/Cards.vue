@@ -24,33 +24,33 @@
   </v-layout>
 </template>
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
   name: 'Cards',
   data() {
     return {
       cards: [],
-      menu: false,
-    };
+      menu: false
+    }
   },
   computed: {
     filteredCards() {
-      return this.cards.slice(3, -1);
-    },
+      return this.cards.slice(3, -1)
+    }
   },
   methods: {
     getCards() {
       axios.get('https://api.scryfall.com/cards/search?q=c%3Ablack+cmc%3D5').then((res) => {
-        this.cards = res.data.data;
+        this.cards = res.data.data
       }).catch(() => {
-      });
+      })
     },
   },
   beforeMount() {
-    this.getCards();
+    this.getCards()
   },
-};
+}
 </script>
 <style lang="scss" scoped>
   img {
