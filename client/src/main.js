@@ -4,6 +4,7 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import App from './App'
 import router from './router'
+import store from './store'
 
 Vue.use(Vuetify, {
   iconfont: 'md'
@@ -12,6 +13,7 @@ Vue.use(Vuetify, {
 Vue.config.productionTip = false
 
 new Vue({
+  store,
   router,
   render: h => h(App)
 }).$mount('#app')
