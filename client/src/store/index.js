@@ -1,17 +1,17 @@
 import Vue from 'vue'
-import vuex from 'vuex'
+import Vuex from 'vuex'
 import modules from './modules'
 
-Vue.use(vuex)
+Vue.use(Vuex)
 
-const store = new vuex.Store({
+const store = new Vuex.Store({
   modules,
   strict: process.env.NODE_ENV !== 'production'
 })
 
 for(const moduleName of Object.keys(modules)) {
   if(modules[moduleName].actions.init) {
-    store.dispatch(`{moduleName}/init`)
+    store.dispatch(`${moduleName}/init`)
   }
 }
 

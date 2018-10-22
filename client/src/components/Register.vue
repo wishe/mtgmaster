@@ -1,9 +1,9 @@
 <template>
   <v-layout row>
     <v-flex xs12 sm4 offset-sm4>
-      <v-form @submit="onLoginSubmit" v-model="valid">
-        <v-layout row>
-          <h2>Login to MTG Master</h2>
+      <v-form @submit="onRegisterSubmit" v-model="valid">
+        <v-layout row text-xs-center>
+          <h2>Register an account with MTG Master</h2>
         </v-layout>
         <v-layout row>
           <v-text-field
@@ -17,14 +17,14 @@
           <v-text-field
             v-model="password"
             :rules="passwordRules"
-            type="password"
             :counter="20"
+            type="password"
             label="Password"
             required
           ></v-text-field>
         </v-layout>
         <v-layout row>
-          <v-btn type="submit" color="success" block dark>Login</v-btn>
+          <v-btn type="submit" color="success" block dark>Register account</v-btn>
         </v-layout>
       </v-form>
     </v-flex>
@@ -32,12 +32,11 @@
 </template>
 <script>
 export default {
-  name: 'Login',
+  name: 'Register',
   data() {
     return {
       email: '',
       password: '',
-      remember: true,
       emailRules: [
         v => !!v || 'Epost er påkrevd',
         v => /.+@.+/.test(v) || 'Eposten må være gyldig'
@@ -50,21 +49,16 @@ export default {
     }
   },
   methods: {
-    onLoginSubmit() {
-      this.$store.dispatch('auth/loginUser', { email: this.email, password: this.password })
+    onRegisterSubmit() {
+      this.$store.dispatch('auth/registerUser', { email: this.email, password: this.password })
       .then(() => {
         this.$router.push({ name: 'Cards' })
-      }).catch(() => {
+      })
+      .catch(() => {
 
       })
+
     }
   }
 }
 </script>
-<style lang="scss">
-  form {
-    margin-top: 2rem;
-    box-shadow: 2px 4px 5px 0px rgba(0,0,0,0.75);
-    padding: 2rem;
-  }
-</style>

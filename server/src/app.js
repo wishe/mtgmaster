@@ -1,7 +1,6 @@
 const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
-const session = require('express-session')
 const cors = require('cors')
 const morgan = require('morgan')
 const passport = require('passport')
@@ -18,15 +17,8 @@ app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(session({
-  secret: 'mtgmaster',
-  cookie: { maxAge: 60000 },
-  resave: false,
-  saveUninitialized: false
-}))
 
 app.use(passport.initialize())
-app.use(passport.session())
 
 // Routes
 app.use('/', routes)
