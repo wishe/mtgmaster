@@ -6,6 +6,8 @@ import Information from '@/components/Information'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import Cards from '@/components/Cards'
+import Decks from '@/components/Decks'
+import Draftbuilder from '@/components/Draftbuilder'
 
 Vue.use(Router)
 
@@ -21,6 +23,16 @@ const router = new Router({
       path: 'cards',
       name: 'Cards',
       component: Cards
+    },
+    {
+      path: 'decks',
+      name: 'Decks',
+      component: Decks
+    },
+    {
+      path: 'draftbuilder',
+      name: 'Draftbuilder',
+      component: Draftbuilder
     },
     {
       path: '/information',
@@ -46,14 +58,11 @@ router.beforeEach(async function (to, from, next) {
   if (!store.getters['auth/check'] && store.getters['auth/token']) {
     await store.dispatch('auth/fetchUser')
   }
-  // If no auth check redirect login
-  // if no auth check but token, fetch user and move on
-  // If no auth check and no token, redirect to login
   next()
 })
 
 router.beforeEach(async function (to, from, next) {
-  if (to.path !== '/login' && to.path !== '/register') {
+  if (to.path !== '/login' && to.path !== '/register' && to.path !== '/') {
     if (!store.getters['auth/check']) {
       next({ name: 'Login' })
     }
@@ -62,6 +71,5 @@ router.beforeEach(async function (to, from, next) {
       next({ name: 'Cards' })
     }
   }
-
   next()
 })

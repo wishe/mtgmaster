@@ -1,20 +1,26 @@
 <template>
-  <div id="app">
-    <v-toolbar dark fixed>
+  <v-app id="app">
+    <v-toolbar fixed flat>
       <v-toolbar-title>MTG Master</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn v-if="auth" flat :to="{ name: 'Cards' }">Cards</v-btn>
-        <v-btn v-if="auth" flat :to="{ name: 'Information' }">Information</v-btn>
-        <v-btn v-if="!auth" flat :to="{ name: 'Login' }">Login</v-btn>
-        <v-btn v-if="!auth" flat :to="{ name: 'Register' }">Register</v-btn>
-        <v-btn v-if="auth" flat @click="logOut">Log out</v-btn>
+        <v-btn v-if="auth" flat :to="{ name: 'Cards' }">Kort</v-btn>
+        <v-btn v-if="auth" flat :to="{ name: 'Decks' }">Decks</v-btn>
+        <v-btn v-if="auth" flat :to="{ name: 'Draftbuilder' }">Draftbygger</v-btn>
+        <v-btn v-if="auth" flat :to="{ name: 'Information' }">Informasjon</v-btn>
+        <v-btn v-if="!auth" flat :to="{ name: 'Login' }">Logg inn</v-btn>
+        <v-btn v-if="!auth" flat :to="{ name: 'Register' }">Registrer</v-btn>
+        <v-btn v-if="auth" flat @click="logOut">Logg ut</v-btn>
       </v-toolbar-items>
     </v-toolbar>
-    <div class="content">
+    <v-container fluid class="content">
       <router-view/>
-    </div>
-  </div>
+    </v-container>
+    <v-footer class="pa-3" fixed>
+      <v-spacer></v-spacer>
+      <div>&copy; Wishe {{ new Date().getFullYear() }}</div>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
@@ -37,7 +43,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -45,7 +51,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   .content {
-    margin-top: 6rem;
+    margin-top: 5rem;
+    margin-bottom: 2rem;
   }
+
 }
 </style>

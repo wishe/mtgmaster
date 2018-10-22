@@ -1,9 +1,17 @@
 <template>
   <v-layout row>
     <v-flex xs12 sm4 offset-sm4>
-      <v-form @submit="onRegisterSubmit" v-model="valid">
-        <v-layout row text-xs-center>
-          <h2>Register an account with MTG Master</h2>
+      <v-alert
+        v-model="alert"
+        dismissible
+        type="error"
+        color="error"
+        outline>
+        You need to enter a valid email and a password longer than 8 characters!
+      </v-alert>
+      <v-form @submit.prevent="onRegisterSubmit" v-model="valid">
+        <v-layout row justify-center>
+          <h2>Register</h2>
         </v-layout>
         <v-layout row>
           <v-text-field
@@ -24,7 +32,7 @@
           ></v-text-field>
         </v-layout>
         <v-layout row>
-          <v-btn type="submit" color="success" block dark>Register account</v-btn>
+          <v-btn type="submit" color="success" block depressed outline>Register</v-btn>
         </v-layout>
       </v-form>
     </v-flex>
@@ -37,6 +45,7 @@ export default {
     return {
       email: '',
       password: '',
+      alert: false,
       emailRules: [
         v => !!v || 'Epost er påkrevd',
         v => /.+@.+/.test(v) || 'Eposten må være gyldig'
@@ -55,7 +64,7 @@ export default {
         this.$router.push({ name: 'Cards' })
       })
       .catch(() => {
-
+        this.alert = true
       })
 
     }

@@ -33,7 +33,7 @@ exports.login = async (req, res) => {
   }
 }
 
-exports.getUser = async (req, res) => {
+exports.show = async (req, res) => {
   const userObject = {
     id: req.user.id,
     email: req.user.email

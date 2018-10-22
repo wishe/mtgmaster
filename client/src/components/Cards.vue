@@ -1,25 +1,12 @@
 <template>
-  <v-layout justify-center>
-    <v-flex xs12 sm8>
-      <v-layout row wrap>
-        <v-flex
-          v-for="(card, index) in cards"
-          :key="index">
-          <v-card>
-            <img :src="card.image_uris.normal" alt="">
-            <v-btn
-              absolute
-              bottom
-              dark
-              fab
-              right
-              color="pink"
-            >
-              <v-icon>add</v-icon>
-            </v-btn>
-          </v-card>
-        </v-flex>
-      </v-layout>
+  <v-layout row wrap>
+    <v-flex
+      v-for="(card, index) in cards"
+      :key="index"
+      xs6 sm3 lg2
+      class="card-holder">
+        <img :src="card.image_uris.large" alt="">
+      
     </v-flex>
   </v-layout>
 </template>
@@ -41,7 +28,7 @@ export default {
   },
   methods: {
     getCards() {
-      axios.get('https://api.scryfall.com/cards/search?q=c%3Ablack+cmc%3D5').then((res) => {
+      axios.get('https://api.scryfall.com/cards/search?q=c%3Awhite+cmc%3D1').then((res) => {
         this.cards = res.data.data
       }).catch(() => {
       })
@@ -54,7 +41,9 @@ export default {
 </script>
 <style lang="scss" scoped>
   img {
+    width: 100%
+  }
+  .card-holder {
     padding: .5rem;
-    width: 250px;
   }
 </style>

@@ -1,15 +1,23 @@
 <template>
   <v-layout row>
-    <v-flex xs12 sm4 offset-sm4>
-      <v-form @submit="onLoginSubmit" v-model="valid">
-        <v-layout row>
-          <h2>Login to MTG Master</h2>
+    <v-flex xs12 md4 offset-md4>
+      <v-alert
+        v-model="alert"
+        dismissible
+        type="error"
+        color="error"
+        outline>
+        Ugyldig brukernavn og/eller passord. Prøv igjen
+      </v-alert>
+      <v-form @submit.prevent="onLoginSubmit" v-model="valid">
+        <v-layout row justify-center>
+          <h2>Login</h2>
         </v-layout>
         <v-layout row>
           <v-text-field
             v-model="email"
             :rules="emailRules"
-            label="Email"
+            label="Epost"
             required
           ></v-text-field>
         </v-layout>
@@ -19,12 +27,12 @@
             :rules="passwordRules"
             type="password"
             :counter="20"
-            label="Password"
+            label="Passord"
             required
           ></v-text-field>
         </v-layout>
         <v-layout row>
-          <v-btn type="submit" color="success" block dark>Login</v-btn>
+          <v-btn type="submit" color="success" block depressed outline>Login</v-btn>
         </v-layout>
       </v-form>
     </v-flex>
@@ -38,6 +46,8 @@ export default {
       email: '',
       password: '',
       remember: true,
+      showError: false,
+      alert: false,
       emailRules: [
         v => !!v || 'Epost er påkrevd',
         v => /.+@.+/.test(v) || 'Eposten må være gyldig'
@@ -55,7 +65,7 @@ export default {
       .then(() => {
         this.$router.push({ name: 'Cards' })
       }).catch(() => {
-
+        this.alert = true
       })
     }
   }
@@ -64,7 +74,8 @@ export default {
 <style lang="scss">
   form {
     margin-top: 2rem;
-    box-shadow: 2px 4px 5px 0px rgba(0,0,0,0.75);
-    padding: 2rem;
+    .v-btn {
+      margin-top: 2rem;
+    }
   }
 </style>
