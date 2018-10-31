@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
-    <v-toolbar fixed flat>
-      <v-toolbar-title>MTG Master</v-toolbar-title>
+    <v-toolbar app flat>
+      <v-toolbar-title><router-link :to="{ name: 'Home' }"><img class="application-logo" src="./assets/mtglogo.png"></router-link></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn v-if="auth" flat :to="{ name: 'Cards' }">Kort</v-btn>
@@ -13,10 +13,12 @@
         <v-btn v-if="auth" flat @click="logOut">Logg ut</v-btn>
       </v-toolbar-items>
     </v-toolbar>
-    <v-container fluid class="content">
-      <router-view/>
-    </v-container>
-    <v-footer class="pa-3" fixed>
+    <v-content fluid class="content">
+      <v-container fluid>
+        <router-view/>
+      </v-container>
+    </v-content>
+    <v-footer class="pa-3" fixed app>
       <v-spacer></v-spacer>
       <div>&copy; Wishe {{ new Date().getFullYear() }}</div>
     </v-footer>
@@ -26,7 +28,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-export default {
+export default {  
   name: 'App',
   computed: {
     ...mapGetters({
@@ -50,10 +52,11 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  .content {
-    margin-top: 5rem;
-    margin-bottom: 2rem;
+  .application-logo {
+    width: 120px;
   }
-
 }
+</style>
+<style lang="scss" scoped>
+ 
 </style>

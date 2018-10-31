@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
-import Home from '@/components/Home'
-import Information from '@/components/Information'
-import Login from '@/components/Login'
-import Register from '@/components/Register'
-import Cards from '@/components/Cards'
-import Decks from '@/components/Decks'
-import Draftbuilder from '@/components/Draftbuilder'
+import Home from '@/pages/Home'
+import Information from '@/pages/static/Information'
+import Login from '@/pages/auth/Login'
+import Register from '@/pages/auth/Register'
+import Cards from '@/pages/cards/Cards'
+import Decks from '@/pages/decks/Decks'
+import Draftbuilder from '@/pages/draftbuilder/Draftbuilder'
 
 Vue.use(Router)
 
