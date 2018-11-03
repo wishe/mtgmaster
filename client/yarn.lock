@@ -653,6 +653,10 @@
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.2.tgz#54c5a964462be3d4d78af631363c18d6fa91ac26"
 
+"@saeris/vue-keyrune@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@saeris/vue-keyrune/-/vue-keyrune-1.0.5.tgz#c24bfda751e56ff8857c2e56a6996e2bd00e0364"
+
 "@saeris/vue-mana@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@saeris/vue-mana/-/vue-mana-1.0.3.tgz#4e90b5811f5a2b89c8c61a665a865880edb58deb"
@@ -3990,6 +3994,10 @@ jsprim@^1.2.2:
     extsprintf "1.3.0"
     json-schema "0.2.3"
     verror "1.10.0"
+
+keyrune@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/keyrune/-/keyrune-3.3.1.tgz#f0d84a32bb05d3ab1bf3984d560bdba057d0e028"
 
 killable@^1.0.0:
   version "1.0.1"

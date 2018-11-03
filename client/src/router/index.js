@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
 import Home from '@/pages/Home'
+import Settings from '@/pages/settings/Settings';
 import Information from '@/pages/static/Information'
 import Login from '@/pages/auth/Login'
 import Register from '@/pages/auth/Register'
@@ -35,17 +36,22 @@ const router = new Router({
       component: Draftbuilder
     },
     {
-      path: '/information',
+      path: 'information',
       name: 'Information',
       component: Information
     },
     {
-      path: '/login',
+      path: 'settings',
+      name: 'Settings',
+      component: Settings
+    },
+    {
+      path: 'login',
       name: 'Login',
       component: Login
     },
     {
-      path: '/register',
+      path: 'register',
       name: 'Register',
       component: Register
     }

@@ -1,38 +1,83 @@
 <template>
   <v-layout row>
-      <v-navigation-drawer 
-        app 
-        clipped 
-        dark
-        floating
-        width="500">
-        <h2>Filtrer kort</h2>
-      </v-navigation-drawer>
-      <v-flex xs12> 
-        <v-form @submit.prevent="searchCards">
-          <v-layout>
-            <v-flex xs9 md11>
-              <v-text-field
-                v-model="searchString"
-                label="Søk"
-                placeholder="Søk etter kort"
-              ></v-text-field>
-            </v-flex>
-            <v-flex xs3 md1>
-              <v-btn type="submit" color="success">Søk</v-btn>
-            </v-flex>
-          </v-layout>
-        </v-form>
-      <v-layout row wrap>
+    <v-navigation-drawer
+      app 
+      dark
+      floating
+      width="500">
+      <h4 class="display-1 text-md-left">Filtrer kort</h4>
+      <v-subheader>Farge</v-subheader>
+      <div class="color-filter">
+        <Mana v-for="(item, index) in colors" :symbol="item" size="4x" cost :key="index"></Mana>
+      </div>
+      <v-subheader>Mana</v-subheader>
+      <div class="mana-filter">
+        <Mana v-for="(item, index) in mana" :symbol="item" size="3x" cost :key="index"></Mana>
+      </div>
+      <v-subheader>Type</v-subheader>
+      <div class="type-filter">
+        <Mana v-for="(type, index) in types" :symbol="type" size="4x" :key="index"></Mana>
+      </div>
+    </v-navigation-drawer>
+    <v-flex xs12> 
+      <v-form @submit.prevent="searchCards">
+        <v-layout>
+          <v-flex xs9 md11>
+            <v-text-field
+              v-model="searchQuery"
+              label="Søk"
+              placeholder="Søk etter kort"
+            ></v-text-field>
+          </v-flex>
+          <v-flex xs3 md1>
+            <v-btn type="submit" color="success">Søk</v-btn>
+          </v-flex>
+        </v-layout>
+      </v-form>
+      <v-layout row>
         <v-flex xs12>
-          <v-progress-linear v-if="searching" :indeterminate="true"></v-progress-linear>
+          <v-dialog
+            v-model="loading"
+
+            persistent
+            width="300"
+          >
+            <v-card
+              color="dark"
+              dark
+            >
+              <v-card-text>
+                Finner kortene dine
+                <v-progress-linear
+                  indeterminate
+                  color="grey"
+                  class="mb-0"
+                ></v-progress-linear>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+        </v-flex>
+      </v-layout>
+      <v-layout row>
+        <v-flex v-if="cards.length > 0" xs6 text-md-left>
+          <p>Vi fant <strong>{{ total }}</strong> kort du kan se på</p>
+        </v-flex>
+        <v-flex v-if="cards.length > 0" xs6 text-md-right>
+          <p v-if="page">Viser side <strong>{{ page }}</strong> av {{ pages }}<strong></strong> sider</p>
+          <p v-else>Viser side 1 av 1</p>
+        </v-flex>
+      </v-layout>
+      <v-layout row>
+        <v-flex xs12>
           <v-alert
-            v-if="cards.length < 1"
+            v-if="cards.length < 1 && loading === false"
             value="true"
             color="error">
-            Vi fant ingen kort på kriteriene du har oppgitt
+            Vi fant ingen kort med kriteriene du har valgt.
           </v-alert>
         </v-flex>
+      </v-layout>
+      <v-layout row wrap>
         <v-flex
           v-for="(card, index) in cards"
           :key="index"
@@ -45,7 +90,11 @@
       <v-layout row justify-center>
         <v-flex xs12>
           <v-pagination
-            :length="15"
+            v-if="!loading && pages"
+            :length="pages"
+            :value="page"
+            @input="getMoreCards"
+            total-visible="20"
             dark>
           </v-pagination>
         </v-flex>
@@ -54,44 +103,54 @@
   </v-layout>
 </template>
 <script>
-import axios from 'axios'
-
+import { mapGetters } from 'vuex'
+import { Mana } from '@saeris/vue-mana'
+import 'mana-font';
 
 export default {
   name: 'Cards',
+  components: {
+    Mana
+  }, 
   data() {
     return {
-      cards: [],
-      searchString: '',
-      searching: false
+      searchQuery: '',
+      mana: this.generateArray(8),
+      colors: ['r', 'w', 'b', 'u', 'g', 'c'],
+      types: ['artifact', 'creature', 'enchantment', 'instant', 'land', 'planeswalker', 'sorcery']
     }
   },
   computed: {
+    ...mapGetters('cards', ['cards', 'searching', 'loading', 'error', 'total','pages', 'page'])
   },
   methods: {
-    getCards() {
-      this.cards = []
-      axios.get('https://api.scryfall.com/cards/search?q=c%3Ablack+cmc%3D1').then((res) => {
-        this.cards = res.data.data
-        this.searching = false
-      }).catch(() => {
-        
-      })
+    generateArray(number) {
+      let numbers = [];
+
+      for (let i = 0; i < number; i++) {
+        numbers.push(i.toString())
+      }
+
+      return numbers;
+    },
+    getMoreCards(value) {
+      if(this.searching) {
+        this.$store.dispatch('cards/searchCards', { q: this.searchQuery, page: value })
+      } else {
+        this.$store.dispatch('cards/getAllCards', { page: value })
+      }
     },
     searchCards() {
-      this.cards = []
-      this.searching = true;
-      axios.get(`https://api.scryfall.com/cards/search?order=cmc&q=${encodeURIComponent(this.searchString).replace(/'/g, '%27')}`).then((res) => {
-        this.cards = res.data.data
-        this.searching = false
-      }).catch(() => {
-        this.searching = false
-      })
+      if(this.searchQuery !== '') {
+        this.$store.dispatch('cards/searchCards', { q: this.searchQuery, page: 1 })
+      } else {
+        this.$store.dispatch('cards/getAllCards', { page: 1 })
+      }
+      
     },
-  
   },
   beforeMount() {
-    this.getCards()
+    this.$store.dispatch('cards/getAllCards', { page: 1 })
   },
 }
 </script>
@@ -103,11 +162,34 @@ export default {
     padding: .5rem;
   }
   .v-navigation-drawer {
-    padding: 1rem;
+    padding: 1.5rem;
     color: white;
   }
-  .v-card {
-    background-color: #f5f5f5;
-
+  .color-filter, .mana-filter, .type-filter {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .v-subheader {
+    padding: 25px 0 15px 2px;
+  }
+  .ms-cost {
+    color: #424242;
+  }
+  .ms-cost.ms-3x {
+    line-height: 2.2rem;
+  }
+  .ms-cost.ms-4x {
+    line-height: 3rem;
+  }
+  .ms:hover {
+    color: black;
+    cursor: pointer;
+  }
+  .ms-cost:hover {
+    background-color: white;
+  }
+  .cards-found {
+    font-weight: bold;
   }
 </style>
