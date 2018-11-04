@@ -9,9 +9,10 @@
 
           <v-divider class="my-3"></v-divider>
 
-          <div class="title mb-3">Register deg og kom i gang</div>
+          <div v-if="!auth" class="title mb-3">Register deg og kom i gang</div>
 
           <v-btn
+            v-if="!auth"
             :to="{ name: 'Login' }"
             class="mx-0"
             color="primary"
@@ -24,7 +25,14 @@
   </v-jumbotron>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Home',
+  computed: {
+    ...mapGetters({
+      auth: 'auth/check'
+    })
+  }
 };
 </script>

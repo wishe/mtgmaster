@@ -5,18 +5,28 @@
       dark
       floating
       width="500">
-      <h4 class="display-1 text-md-left">Filtrer kort</h4>
-      <v-subheader>Farge</v-subheader>
-      <div class="color-filter">
-        <Mana v-for="(item, index) in colors" :symbol="item" size="4x" cost :key="index"></Mana>
-      </div>
-      <v-subheader>Mana</v-subheader>
-      <div class="mana-filter">
-        <Mana v-for="(item, index) in mana" :symbol="item" size="3x" cost :key="index"></Mana>
-      </div>
-      <v-subheader>Type</v-subheader>
-      <div class="type-filter">
-        <Mana v-for="(type, index) in types" :symbol="type" size="4x" :key="index"></Mana>
+      <v-toolbar flat>
+        <v-list>
+          <v-list-tile>
+            <v-list-tile-title class="title">
+              Kort
+            </v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-toolbar>
+      <div class="card-filters">
+        <v-subheader>Farge</v-subheader>
+        <div class="color-filter">
+          <Mana v-for="(item, index) in colors" :symbol="item" size="4x" cost :key="index"></Mana>
+        </div>
+        <v-subheader>Mana</v-subheader>
+        <div class="mana-filter">
+          <Mana v-for="(item, index) in mana" :symbol="item" size="3x" cost :key="index"></Mana>
+        </div>
+        <v-subheader>Type</v-subheader>
+        <div class="type-filter">
+          <Mana v-for="(type, index) in types" :symbol="type" size="4x" :key="index"></Mana>
+        </div>
       </div>
     </v-navigation-drawer>
     <v-flex xs12> 
@@ -47,7 +57,7 @@
               dark
             >
               <v-card-text>
-                Finner kortene dine
+                Laster kort...
                 <v-progress-linear
                   indeterminate
                   color="grey"
@@ -63,7 +73,7 @@
           <p>Vi fant <strong>{{ total }}</strong> kort du kan se på</p>
         </v-flex>
         <v-flex v-if="cards.length > 0" xs6 text-md-right>
-          <p v-if="page">Viser side <strong>{{ page }}</strong> av {{ pages }}<strong></strong> sider</p>
+          <p v-if="page">Viser side <strong>{{ page }}</strong> av <strong>{{ pages }}</strong></p>
           <p v-else>Viser side 1 av 1</p>
         </v-flex>
       </v-layout>
@@ -162,8 +172,10 @@ export default {
     padding: .5rem;
   }
   .v-navigation-drawer {
-    padding: 1.5rem;
     color: white;
+  }
+  .card-filters {
+    padding: 0 1.5rem;
   }
   .color-filter, .mana-filter, .type-filter {
     display: flex;

@@ -3,12 +3,12 @@ import Router from 'vue-router'
 import store from '@/store'
 import Home from '@/pages/Home'
 import Settings from '@/pages/settings/Settings';
-import Information from '@/pages/static/Information'
 import Login from '@/pages/auth/Login'
 import Register from '@/pages/auth/Register'
 import Cards from '@/pages/cards/Cards'
 import Decks from '@/pages/decks/Decks'
 import Draftbuilder from '@/pages/draftbuilder/Draftbuilder'
+import Playgroup from '@/pages/playgroup/Playgroup'
 
 Vue.use(Router)
 
@@ -36,9 +36,9 @@ const router = new Router({
       component: Draftbuilder
     },
     {
-      path: 'information',
-      name: 'Information',
-      component: Information
+      path: 'playgroup',
+      name: 'Playgroup',
+      component: Playgroup
     },
     {
       path: 'settings',
@@ -68,11 +68,11 @@ router.beforeEach(async function (to, from, next) {
 })
 
 router.beforeEach(async function (to, from, next) {
-  if (to.path !== '/login' && to.path !== '/register' && to.path !== '/') {
+  if (to.path !== 'login' && to.path !== 'register' && to.path !== '/') {
     if (!store.getters['auth/check']) {
       next({ name: 'Login' })
     }
-  } else if (to.path === '/login' || to.path === '/register') {
+  } else if (to.path === 'login' || to.path === 'register') {
     if (store.getters['auth/check']) {
       next({ name: 'Cards' })
     }
