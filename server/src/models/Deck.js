@@ -4,13 +4,17 @@ const Schema = mongoose.Schema
 const DeckSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
+    dropDups: true
   },
   type: {
+    default: undefined,
     type: String
   },
   colors: {
-    type: [String]
+    type: [String],
+    default: undefined
   },
   cards: {
     type: [String],

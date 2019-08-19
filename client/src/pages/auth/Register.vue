@@ -7,7 +7,7 @@
         type="error"
         color="error"
         outline>
-        You need to enter a valid email and a password longer than 8 characters!
+        Du må skrive inn en gyldig epostadrese og passord som er lenger enn 8 bokstaver/tall
       </v-alert>
       <v-form @submit.prevent="onRegisterSubmit" v-model="valid">
         <v-layout row justify-center>

@@ -14,20 +14,7 @@
           </v-list-tile>
         </v-list>
       </v-toolbar>
-      <div class="card-filters">
-        <v-subheader>Farge</v-subheader>
-        <div class="color-filter">
-          <Mana v-for="(item, index) in colors" :symbol="item" size="4x" cost :key="index"></Mana>
-        </div>
-        <v-subheader>Mana</v-subheader>
-        <div class="mana-filter">
-          <Mana v-for="(item, index) in mana" :symbol="item" size="3x" cost :key="index"></Mana>
-        </div>
-        <v-subheader>Type</v-subheader>
-        <div class="type-filter">
-          <Mana v-for="(type, index) in types" :symbol="type" size="4x" :key="index"></Mana>
-        </div>
-      </div>
+      <FilterCards @updateQuery="updateQuery"></FilterCards>
     </v-navigation-drawer>
     <v-flex xs12> 
       <v-form @submit.prevent="searchCards">
@@ -88,14 +75,7 @@
         </v-flex>
       </v-layout>
       <v-layout row wrap>
-        <v-flex
-          v-for="(card, index) in cards"
-          :key="index"
-          xs6 sm3 lg2
-          class="card-holder">
-            <img v-if="card.image_uris" :src="card.image_uris.large" alt="">
-            <img v-else src="http://placehold.jp/250x350.png" alt="">
-        </v-flex>
+        <Card v-for="(card, index) in cards" :key="index" :card="card"></Card>
       </v-layout>
       <v-layout row justify-center>
         <v-flex xs12>
@@ -113,36 +93,25 @@
   </v-layout>
 </template>
 <script>
+import FilterCards from '../../components/cards/FilterCards'
+import Card from '../../components/cards/Card'
 import { mapGetters } from 'vuex'
-import { Mana } from '@saeris/vue-mana'
-import 'mana-font';
 
 export default {
   name: 'Cards',
   components: {
-    Mana
+    FilterCards,
+    Card
   }, 
   data() {
     return {
-      searchQuery: '',
-      mana: this.generateArray(8),
-      colors: ['r', 'w', 'b', 'u', 'g', 'c'],
-      types: ['artifact', 'creature', 'enchantment', 'instant', 'land', 'planeswalker', 'sorcery']
+      searchQuery: ''
     }
   },
   computed: {
     ...mapGetters('cards', ['cards', 'searching', 'loading', 'error', 'total','pages', 'page'])
   },
   methods: {
-    generateArray(number) {
-      let numbers = [];
-
-      for (let i = 0; i < number; i++) {
-        numbers.push(i.toString())
-      }
-
-      return numbers;
-    },
     getMoreCards(value) {
       if(this.searching) {
         this.$store.dispatch('cards/searchCards', { q: this.searchQuery, page: value })
@@ -152,12 +121,25 @@ export default {
     },
     searchCards() {
       if(this.searchQuery !== '') {
-        this.$store.dispatch('cards/searchCards', { q: this.searchQuery, page: 1 })
+        this.$store.dispatch('cards/searchCards', { q: this.searchQuery })
       } else {
         this.$store.dispatch('cards/getAllCards', { page: 1 })
       }
       
     },
+    updateQuery(e) {
+      console.log('query update');
+      this.searchQuery = e;
+    },
+  },
+  watch: {
+    searchQuery: function() {
+      console.log(this.searchQuery);
+      clearTimeout(searchTimer);
+      const searchTimer = setTimeout(() => {
+        this.searchCards();
+      }, 1000)
+    }
   },
   beforeMount() {
     this.$store.dispatch('cards/getAllCards', { page: 1 })
@@ -173,33 +155,6 @@ export default {
   }
   .v-navigation-drawer {
     color: white;
-  }
-  .card-filters {
-    padding: 0 1.5rem;
-  }
-  .color-filter, .mana-filter, .type-filter {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
-  .v-subheader {
-    padding: 25px 0 15px 2px;
-  }
-  .ms-cost {
-    color: #424242;
-  }
-  .ms-cost.ms-3x {
-    line-height: 2.2rem;
-  }
-  .ms-cost.ms-4x {
-    line-height: 3rem;
-  }
-  .ms:hover {
-    color: black;
-    cursor: pointer;
-  }
-  .ms-cost:hover {
-    background-color: white;
   }
   .cards-found {
     font-weight: bold;

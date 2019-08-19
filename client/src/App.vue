@@ -5,7 +5,7 @@
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn v-if="auth" flat :to="{ name: 'Cards' }"><Keyrune set="bcore" size="2x" />Kort</v-btn>
-        <v-btn v-if="auth" flat :to="{ name: 'Decks' }"><Keyrune set="duels" size="2x" />Decks</v-btn>
+        <v-btn v-if="auth" flat :to="{ name: 'MyDecks' }"><Keyrune set="duels" size="2x" />Decks</v-btn>
         <v-btn v-if="auth" flat :to="{ name: 'Draftbuilder' }"><Keyrune set="wth"  size="2x" />Draftbygger</v-btn>
         <v-btn v-if="auth" flat :to="{ name: 'Playgroup' }"><Keyrune set="pfnm" size="2x" />Spillgruppe</v-btn>
         <v-btn v-if="auth" flat :to="{ name: 'Settings' }"><Keyrune set="v0x" size="2x" />Innstillinger</v-btn>

@@ -4,11 +4,13 @@ const passport = require('passport')
 require('../handlers/passport')(passport)
 const AuthController = require('../controllers/AuthController')
 const DeckController = require('../controllers/DeckController')
-// const { catchErrors } = require('../handlers/errorHandlers')
+const { catchErrors } = require('../handlers/errorHandlers')
 
-router.post('/login', AuthController.login)
-router.post('/register', AuthController.register)
-router.get('/user', passport.authenticate('jwt', { session: false }), AuthController.show)
+router.post('/login', catchErrors(AuthController.login))
+router.post('/register', catchErrors(AuthController.register))
+router.get('/user', passport.authenticate('jwt', { session: false }), catchErrors(AuthController.show))
 
-router.get('/decks', passport.authenticate('jwt', { session: false }), DeckController.index)
+router.get('/decks/mine', passport.authenticate('jwt', { session: false }), catchErrors(DeckController.index))
+router.post('/decks', passport.authenticate('jwt', { session: false }), catchErrors(DeckController.store))
+
 module.exports = router

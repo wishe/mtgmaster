@@ -8,7 +8,7 @@ exports.catchErrors = (fn) => {
 // Not found
 exports.notFound = (req, res, next) => {
   const err = new Error('Not Found')
-  err.status = 40
+  err.status = 400
   next(err)
 }
 

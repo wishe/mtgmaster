@@ -6,9 +6,13 @@ import Settings from '@/pages/settings/Settings';
 import Login from '@/pages/auth/Login'
 import Register from '@/pages/auth/Register'
 import Cards from '@/pages/cards/Cards'
-import Decks from '@/pages/decks/Decks'
+import DecksIndex from '@/pages/decks/index'
+import MyDecks from '@/pages/decks/mine'
+import PlaygroupDecks from '@/pages/decks/playgroup'
 import Draftbuilder from '@/pages/draftbuilder/Draftbuilder'
 import Playgroup from '@/pages/playgroup/Playgroup'
+
+import NotFound from '@/pages/NotFound'
 
 Vue.use(Router)
 
@@ -21,14 +25,29 @@ const router = new Router({
       component: Home
     },
     {
-      path: 'cards',
+      path: '/cards',
       name: 'Cards',
       component: Cards
     },
     {
-      path: 'decks',
-      name: 'Decks',
-      component: Decks
+      path: '/decks',
+      component: DecksIndex,
+      children: [
+        {
+          path: '',
+          component: MyDecks
+        },
+        {
+          path: 'mine',
+          name: 'MyDecks',
+          component: MyDecks
+        },
+        {
+          path: 'playgroup',
+          name: 'PlaygroupDecks',
+          component: PlaygroupDecks
+        }
+      ]
     },
     {
       path: 'draftbuilder',
@@ -54,6 +73,10 @@ const router = new Router({
       path: 'register',
       name: 'Register',
       component: Register
+    },
+    { 
+      path: '*', 
+      component: NotFound 
     }
   ]
 })
