@@ -10,7 +10,7 @@
   "dependencies": {
     "@saeris/vue-keyrune": "^1.0.5",
     "@saeris/vue-mana": "^1.0.3",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "js-cookie": "^2.2.0",
     "keyrune": "^3.3.1",
     "lodash": "^4.17.11",
