@@ -13,7 +13,7 @@
     "axios": "^0.18.0",
     "js-cookie": "^2.2.0",
     "keyrune": "^3.3.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "mana-font": "^1.4.1",
     "node-sass": "^4.9.4",
     "sass-loader": "^7.1.0",
